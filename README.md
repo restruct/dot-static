@@ -1,5 +1,6 @@
 Statically compiled Graphviz dot (dot_static, x86)
 ======
+This is a very basic version without any additional options, it supports SVG output (no PNG), and only plaintext node labels (no HTML).
 
 ## Graphviz
 
@@ -71,9 +72,19 @@ $ cd cmd/dot
 $ make dot_static
 ```
 
-Check library dependencies: https://gist.github.com/stain/8335322
+### Compiling a more full-featured version
 
-Additional reference: http://genomewiki.ucsc.edu/index.php/Graphviz_static_build
+I didn't manage to compile a static version of dot with more options/library/plugins. My attempts always resulted in dynamically linked libraries and thus - crashes when run on the webserver. Most importantly, I'd like to compile a version which includes PNG output (libpng) and HTML labels (libexpat) support
+
+Check library dependencies & getting static versions:
+https://gist.github.com/stain/8335322
+http://jurjenbokma.com/ApprenticesNotes/getting_statlinked_binaries_on_debian.xhtml
+
+Additional references:
+http://www.graphviz.org/Download_source.php
+http://genomewiki.ucsc.edu/index.php/Graphviz_static_build
+
+Using Debian pre-compiled versions in homedir with setting LD_LIBRARY_PATH: https://stackoverflow.com/questions/8835108/how-to-specify-non-default-shared-library-path-in-gcc-linux-getting-error-whil#answer-8835402
 
 ### Javascript version
 Using Emscripten, this project transpiles dot into Javascript, allowing it to run in the browser, which would remove the need to install it on the server altogether: https://github.com/mdaines/viz.js
