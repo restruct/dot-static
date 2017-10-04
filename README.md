@@ -55,7 +55,9 @@ This package contains statically compiled version(s) of dot (self contained vers
 * For local development on OSX, simply install dot using Homebrew (```brew install graphviz```) and use that instead.
 
 ### Additional notes/credits
-Not sure if necessary, but first simply installed a regular version and dependencies using ```apt-get install graphviz```
+Add a deb-src source to /etc/apt/sources.list and run ```apt-get update```
+
+Install dependencies using ```apt-get build-dep graphviz```
 
 Then used [Life in plain text](https://lifeinplaintextblog.wordpress.com/deploying-graphviz-on-aws-lambda/) as a reference on how to compile dot_static, commands duplicated here for reference (ammended ```configure --enable-static=yes --enable-shared=no```):
 ```
@@ -72,6 +74,9 @@ $ make dot_static
 Check library dependencies: https://gist.github.com/stain/8335322
 
 Additional reference: http://genomewiki.ucsc.edu/index.php/Graphviz_static_build
+
+### Javascript version
+Using Emscripten, this project transpiles dot into Javascript, allowing it to run in the browser, which would remove the need to install it on the server altogether: https://github.com/mdaines/viz.js
 
 ## License
 * This 'Object code': MIT
