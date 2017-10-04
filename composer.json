@@ -1,6 +1,6 @@
 {
   "name": "restruct/dot-static",
-  "description": "Graph visualization",
+  "description": "Statically compiled Graphviz dot",
   "license": "MIT",
   "authors"    : [
     {
