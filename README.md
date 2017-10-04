@@ -5,7 +5,7 @@ Statically compiled Graphviz dot (dot_static, x86)
 
 **Graph visualization** is a way of representing structural information as diagrams of abstract graphs and networks. It has important applications in networking, bioinformatics,  software engineering, database and web design, machine learning, and in visual interfaces for other technical domains.
 
-The Graphviz layout programs take descriptions of graphs in a simple text language, and make diagrams in useful formats, such as images and SVG for web pages; PDF or Postscript for inclusion in other documents; or display in an interactive graph browser.
+The [Graphviz layout programs](http://www.graphviz.org/) take descriptions of graphs in a simple text language, and make diagrams in useful formats, such as images and SVG for web pages; PDF or Postscript for inclusion in other documents; or display in an interactive graph browser.
 
 **So;**
 
@@ -50,7 +50,7 @@ digraph G {
 This package contains statically compiled version(s) of dot (self contained versions, which dont have dependencies on additional system libraries). These can simply be uploaded to a webserver in order to use dot without root/installation privileges.
 
 ### Installation
-* Simply install using composer/upload to your server and make sure you call the correct dot_static for your architecture (hopefully x64/Linux 64bit, which is the only version currently included)
+* Simply install using composer (```composer require restruct/dot-static```), upload to your server and make sure you call the correct dot_static for your architecture (hopefully x64/Linux 64bit, which is the only version currently included)
 * Make sure the vendor/restruct/dot-static/x64/dot_static executable has executable permissions (```chmod +x``` / 744). This permission is set on the file in the repo but doesn't always seem to get transfered properly when uploading via FTP.
 * For local development on OSX, simply install dot using Homebrew (```brew install graphviz```) and use that instead.
 
