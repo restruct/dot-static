@@ -1,0 +1,13 @@
+{
+  "name": "restruct/dot-static",
+  "description": "Graph visualization",
+  "license": "MIT",
+  "authors"    : [
+    {
+      "name": "Restruct web & apps",
+      "email": "dev@restruct.nl",
+      "homepage": "https://restruct.nl",
+      "role": "Developer (SilverStripe module)"
+    }
+  ]
+}
