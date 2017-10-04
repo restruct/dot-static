@@ -44,13 +44,13 @@ digraph G {
 
 ![Graph example](images/cluster.png)
 
-## dot command
+### dot command
 
 **dot** can be used to create ``hierarchical'' or layered drawings of directed graphs. This is the default tool to use if edges have directionality. dot aims edges in the same direction (top to bottom, or left to right) and then attempts to avoid edge crossings and reduce edge length.
 
 This package contains statically compiled version(s) of dot (self contained versions, which dont have dependencies on additional system libraries). These can simply be uploaded to a webserver in order to use dot without root/installation privileges.
 
-### Installation
+## Installation
 * Simply install using composer (```composer require restruct/dot-static```), upload to your server and make sure you call the correct dot_static for your architecture (hopefully x64/Linux 64bit, which is the only version currently included)
 * Make sure the vendor/restruct/dot-static/x64/dot_static executable has executable permissions (```chmod +x``` / 744). This permission is set on the file in the repo but doesn't always seem to get transfered properly when uploading via FTP.
 * For local development on OSX, simply install dot using Homebrew (```brew install graphviz```) and use that instead.
