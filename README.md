@@ -1,10 +1,21 @@
-Statically compiled Graphviz dot (dot_static, x86)
+Statically compiled Graphviz dot (dot_static, x64)
 ======
-This is a very basic version without any additional options, it supports SVG output (no PNG), and only plaintext node labels (no HTML).
+
+Truly statically compiled `dot` binary for Linux x86_64. Supports SVG output and HTML node labels (via expat). No runtime dependencies — works on any Linux x64 system (Debian, Ubuntu, Alpine, etc.).
+
+**Graphviz version:** 12.2.1 (compiled Feb 2026)
+
+## Features
+
+- **SVG output** with plaintext and HTML labels
+- **Truly static binary** — no dynamic linker, no shared libraries needed
+- **2.6MB** stripped binary size
+- **OS-aware bootstrap** (`bootstrap.php`) auto-detects macOS Homebrew or Linux bundled binary
+- **Client-side fallback** (`client/dot-client.js`) renders graphs in the browser via [viz-js](https://github.com/mdaines/viz-js) (WASM)
 
 ## Graphviz
 
-**Graph visualization** is a way of representing structural information as diagrams of abstract graphs and networks. It has important applications in networking, bioinformatics,  software engineering, database and web design, machine learning, and in visual interfaces for other technical domains.
+**Graph visualization** is a way of representing structural information as diagrams of abstract graphs and networks. It has important applications in networking, bioinformatics, software engineering, database and web design, machine learning, and in visual interfaces for other technical domains.
 
 The [Graphviz layout programs](http://www.graphviz.org/) take descriptions of graphs in a simple text language, and make diagrams in useful formats, such as images and SVG for web pages; PDF or Postscript for inclusion in other documents; or display in an interactive graph browser.
 
@@ -51,44 +62,53 @@ digraph G {
 This package contains statically compiled version(s) of dot (self contained versions, which dont have dependencies on additional system libraries). These can simply be uploaded to a webserver in order to use dot without root/installation privileges.
 
 ## Installation
-* Simply install using composer (```composer require restruct/dot-static```), upload to your server and make sure you call the correct dot_static for your architecture (hopefully x64/Linux 64bit, which is the only version currently included)
-* Make sure the vendor/restruct/dot-static/x64/dot_static executable has executable permissions (```chmod +x``` / 744). This permission is set on the file in the repo but doesn't always seem to get transfered properly when uploading via FTP.
-* For local development on OSX, simply install dot using Homebrew (```brew install graphviz```) and use that instead.
 
-### Additional notes/credits
-Add a deb-src source to /etc/apt/sources.list and run ```apt-get update```
-
-Install dependencies using ```apt-get build-dep graphviz```
-
-Then used [Life in plain text](https://lifeinplaintextblog.wordpress.com/deploying-graphviz-on-aws-lambda/) as a reference on how to compile dot_static, commands duplicated here for reference (ammended ```configure --enable-static=yes --enable-shared=no```):
-```
-$ wget http://www.graphviz.org/pub/graphviz/stable/SOURCES/graphviz-2.40.1.tar.gz
-$ tar -xvf graphviz-2.40.1.tar.gz 
-$ // cd into the directory
-$ ./configure --enable-static=yes --enable-shared=no
-$ // install missing dependencies if there is any 
-$ make 
-$ cd cmd/dot
-$ make dot_static
+```bash
+composer require restruct/dot-static
 ```
 
-### Compiling a more full-featured version
+Make sure the `vendor/restruct/dot-static/x64/dot_static` executable has executable permissions (`chmod +x` / 744). This permission is set on the file in the repo but doesn't always seem to get transferred properly when uploading via FTP.
 
-I didn't manage to compile a static version of dot with more options/library/plugins. My attempts always resulted in dynamically linked libraries and thus - crashes when run on the webserver. Most importantly, I'd like to compile a version which includes PNG output (libpng) and HTML labels (libexpat) support
+For local development on macOS, simply install dot using Homebrew (`brew install graphviz`) and use that instead. The bootstrap auto-detects this.
 
-Check library dependencies & getting static versions:
-https://gist.github.com/stain/8335322
-http://jurjenbokma.com/ApprenticesNotes/getting_statlinked_binaries_on_debian.xhtml
+### PHP usage
 
-Additional references:
-http://www.graphviz.org/Download_source.php
-http://genomewiki.ucsc.edu/index.php/Graphviz_static_build
+```php
+// Auto-detect path (macOS Homebrew or Linux bundled binary)
+require 'vendor/restruct/dot-static/bootstrap.php';
+$dotPath = GRAPHVIZ_DOT_PATH;
 
-Using Debian pre-compiled versions in homedir with setting LD_LIBRARY_PATH: https://stackoverflow.com/questions/8835108/how-to-specify-non-default-shared-library-path-in-gcc-linux-getting-error-whil#answer-8835402
+// Or via the class wrapper
+use DotStatic\DotStatic;
+$dotPath = DotStatic::getPath();
+if (DotStatic::isAvailable()) {
+    exec("$dotPath -Tsvg input.dot -o output.svg");
+}
+```
 
-### Javascript version
-Using Emscripten, this project transpiles dot into Javascript, allowing it to run in the browser, which would remove the need to install it on the server altogether: https://github.com/mdaines/viz.js
+### Client-side usage (browser)
+
+For rendering graphs in the browser without a server binary, include the client-side wrapper which uses [viz-js](https://github.com/mdaines/viz-js) (Graphviz compiled to WebAssembly):
+
+```html
+<!-- Auto-renders all elements with data-dot-graph attribute -->
+<script type="module" src="vendor/restruct/dot-static/client/dot-client.js"></script>
+
+<div data-dot-graph="digraph { a -> b }"></div>
+```
+
+Or programmatically:
+
+```javascript
+const svg = await DotClient.renderString('digraph { a -> b }');
+document.body.appendChild(svg);
+```
+
+## Building the static binary
+
+The binary is built reproducibly via Docker (Alpine/musl). See **[build/README.md](build/README.md)** for full build instructions, how it works, and lessons learned.
 
 ## License
+
 * This 'Object code': MIT
 * Source code: Eclipse Public License - v 1.0
