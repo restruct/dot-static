@@ -9,5 +9,10 @@
       "homepage": "https://restruct.nl",
       "role": "Developer (SilverStripe module)"
     }
-  ]
+  ],
+  "autoload": {
+    "psr-4": {
+      "DotStatic\\": "src/"
+    }
+  }
 }
