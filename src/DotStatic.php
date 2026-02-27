@@ -1,6 +1,6 @@
 <?php
 
-namespace DotStatic;
+namespace Restruct\Dot;
 
 /**
  * Wrapper class for the dot-static bootstrap.

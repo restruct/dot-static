@@ -10,9 +10,13 @@
       "role": "Developer (SilverStripe module)"
     }
   ],
+  "require": {
+    "php": ">=8.2",
+    "symfony/process": "^7.0"
+  },
   "autoload": {
     "psr-4": {
-      "DotStatic\\": "src/"
+      "Restruct\\Dot\\": "src/"
     }
   },
   "extra": {
