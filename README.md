@@ -1,6 +1,9 @@
 Statically compiled Graphviz dot (dot_static, x64)
 ======
 
+*Maintained by [Restruct](https://github.com/restruct). If this package saves you time, you can
+[support ongoing maintenance](https://github.com/sponsors/restruct).*
+
 Truly statically compiled `dot` binary for Linux x86_64. Supports SVG output and HTML node labels (via expat). No runtime dependencies — works on any Linux x64 system (Debian, Ubuntu, Alpine, etc.).
 
 **Graphviz version:** 12.2.1 (compiled Feb 2026)
@@ -61,6 +64,12 @@ digraph G {
 
 This package contains statically compiled version(s) of dot (self contained versions, which dont have dependencies on additional system libraries). These can simply be uploaded to a webserver in order to use dot without root/installation privileges.
 
+## Requirements
+
+- PHP 8.2 or higher and `symfony/process` ^7 (`composer.json` is the source of truth).
+- The bundled binary is Linux x86_64 only. On macOS the bootstrap uses Homebrew's `dot`
+  (`brew install graphviz`); on other platforms install Graphviz and set `GRAPHVIZ_DOT_PATH`.
+
 ## Installation
 
 ```bash
@@ -79,7 +88,7 @@ require 'vendor/restruct/dot-static/bootstrap.php';
 $dotPath = GRAPHVIZ_DOT_PATH;
 
 // Or via the class wrapper
-use DotStatic\DotStatic;
+use Restruct\Dot\DotStatic;
 $dotPath = DotStatic::getPath();
 if (DotStatic::isAvailable()) {
     exec("$dotPath -Tsvg input.dot -o output.svg");
@@ -110,5 +119,12 @@ The binary is built reproducibly via Docker (Alpine/musl). See **[build/README.m
 
 ## License
 
-* This 'Object code': MIT
-* Source code: Eclipse Public License - v 1.0
+- Wrapper code (`bootstrap.php`, `src/`, `client/`, `build/`): MIT, see [LICENSE](LICENSE).
+- Bundled binary (`x64/dot_static`): compiled by us, without modifications, from the Graphviz 12.2.1
+  source, which is Copyright its authors and distributed under the Eclipse Public License (see
+  `COPYING` in that source). The binary is not covered by our MIT licence. Its source code is
+  available from https://gitlab.com/graphviz/graphviz/-/releases/12.2.1, and
+  [build/Dockerfile](build/Dockerfile) reproduces the build. It also statically links expat (MIT),
+  zlib (zlib licence) and musl libc (MIT) from Alpine Linux.
+- `client/dot-client.js` loads [viz-js](https://github.com/mdaines/viz-js) (MIT) from a CDN at
+  runtime; it is not bundled.
