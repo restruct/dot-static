@@ -1,0 +1,4 @@
+# Keep build-only files out of dist installs (Packagist zips). The bundled
+# binary is built from build/ by the maintainer; consumers do not need it.
+/build          export-ignore
+/.gitattributes export-ignore
