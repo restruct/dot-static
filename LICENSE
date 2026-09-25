@@ -1,7 +1,8 @@
 This MIT licence covers the wrapper code in this repository (bootstrap.php,
 src/, client/, build/). It does NOT cover the bundled Graphviz binary
-x64/dot_static, which is compiled from Graphviz source distributed under the
-Eclipse Public License; see the License section of README.md.
+x64/dot_static, which is compiled from Graphviz 12.2.1 source distributed under
+the Eclipse Public License 1.0; its full text is in licenses/Graphviz-EPL-1.0.txt
+and the License section of README.md has the details.
 
 MIT License
 

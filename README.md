@@ -121,9 +121,11 @@ The binary is built reproducibly via Docker (Alpine/musl). See **[build/README.m
 
 - Wrapper code (`bootstrap.php`, `src/`, `client/`, `build/`): MIT, see [LICENSE](LICENSE).
 - Bundled binary (`x64/dot_static`): compiled by us, without modifications, from the Graphviz 12.2.1
-  source, which is Copyright its authors and distributed under the Eclipse Public License (see
-  `COPYING` in that source). The binary is not covered by our MIT licence. Its source code is
-  available from https://gitlab.com/graphviz/graphviz/-/releases/12.2.1, and
+  source, which is Copyright its authors and distributed under the Eclipse Public License 1.0
+  (EPL-1.0; see `LICENSE` in that source). The full licence text ships as
+  [licenses/Graphviz-EPL-1.0.txt](licenses/Graphviz-EPL-1.0.txt). The binary is not covered by
+  our MIT licence. Its source code is available from
+  https://gitlab.com/graphviz/graphviz/-/releases/12.2.1, and
   [build/Dockerfile](build/Dockerfile) reproduces the build. It also statically links expat (MIT),
   zlib (zlib licence) and musl libc (MIT) from Alpine Linux.
 - `client/dot-client.js` loads [viz-js](https://github.com/mdaines/viz-js) (MIT) from a CDN at

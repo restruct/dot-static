@@ -1,7 +1,7 @@
 {
   "name": "restruct/dot-static",
   "description": "Statically compiled Graphviz dot",
-  "license": "MIT",
+  "license": "(MIT AND EPL-1.0)",
   "authors"    : [
     {
       "name": "Restruct web & apps",
