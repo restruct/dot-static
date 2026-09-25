@@ -126,7 +126,13 @@ The binary is built reproducibly via Docker (Alpine/musl). See **[build/README.m
   [licenses/Graphviz-EPL-1.0.txt](licenses/Graphviz-EPL-1.0.txt). The binary is not covered by
   our MIT licence. Its source code is available from
   https://gitlab.com/graphviz/graphviz/-/releases/12.2.1, and
-  [build/Dockerfile](build/Dockerfile) reproduces the build. It also statically links expat (MIT),
-  zlib (zlib licence) and musl libc (MIT) from Alpine Linux.
+  [build/Dockerfile](build/Dockerfile) reproduces the build. It also statically links these libraries
+  from Alpine Linux 3.21, whose licence notices ship in [`licenses/`](licenses/):
+  - expat 2.7.4 (MIT): [licenses/expat-COPYING](licenses/expat-COPYING)
+  - zlib 1.3.1 (Zlib licence): [licenses/zlib-LICENSE](licenses/zlib-LICENSE)
+  - musl libc 1.2.5 (MIT): [licenses/musl-COPYRIGHT](licenses/musl-COPYRIGHT)
+
+  The expat and zlib versions are the ones embedded in the binary (`strings x64/dot_static`); a
+  rebuild picks up whatever Alpine 3.21 ships at that time, so update these files with it.
 - `client/dot-client.js` loads [viz-js](https://github.com/mdaines/viz-js) (MIT) from a CDN at
   runtime; it is not bundled.
