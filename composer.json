@@ -1,6 +1,7 @@
 {
   "name": "restruct/dot-static",
-  "description": "Statically compiled Graphviz dot",
+  "description": "Statically compiled Graphviz dot for Linux x64 (SVG, HTML labels, no dependencies), with a fluent PHP DOT builder, SVG renderer and browser fallback",
+  "keywords": ["php", "graphviz", "dot", "svg", "diagram", "graph-visualization", "static-binaries"],
   "license": "(MIT AND EPL-1.0)",
   "authors"    : [
     {
