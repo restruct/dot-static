@@ -1,0 +1,5 @@
+# Dev install for the test suite (composer install in this directory)
+/vendor/
+/composer.lock
+/.phpunit.cache/
+/.phpunit.result.cache

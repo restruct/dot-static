@@ -1,0 +1,70 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+# Read-only token: the jobs only check out and run tests
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        # Floor and ceiling of the declared php constraint (>=8.2). They also cover both PHPUnit
+        # majors require-dev allows: 8.2 resolves PHPUnit 11.5, 8.5 resolves 12.x.
+        php: ['8.2', '8.5']
+
+    steps:
+      # Actions pinned to a commit SHA (tag in the trailing comment): a moved tag cannot change
+      # what runs here
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          tools: composer:v2
+          coverage: none
+
+      - name: Show the bundled binary's version and output formats
+        # Record of what the bundled x64/dot_static can render, read by the README's format note.
+        # dot prints both lists on stderr, and `-T?` exits non-zero by design, hence `|| true`.
+        run: |
+          file x64/dot_static
+          x64/dot_static -V
+          x64/dot_static -T? 2>&1 || true
+
+      - name: Install dependencies
+        # No composer.lock is committed (it is a library), so this resolves fresh per PHP version.
+        run: composer install --no-interaction --no-progress
+
+      - name: Run tests
+        # --fail-on-skipped: the real-render tests skip when no dot resolves, which is right on a
+        # developer machine without Graphviz but would let CI pass green with the bundled binary
+        # never run. On the Linux runner the bundled binary must resolve, so a skip is a failure.
+        # --fail-on-empty-test-suite: a run that discovers no tests exits non-zero instead of 0.
+        run: vendor/bin/phpunit --fail-on-skipped --fail-on-empty-test-suite
+
+  lint:
+    name: Lint PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Every minor the >=8.2 constraint admits today; a syntax check is cheap
+        php: ['8.2', '8.3', '8.4', '8.5']
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # 2.40.0
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: Syntax check every PHP file
+        run: find src tests bootstrap.php -name '*.php' -print0 | xargs -0 -n1 php -l

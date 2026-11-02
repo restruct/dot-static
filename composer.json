@@ -15,9 +15,17 @@
     "php": ">=8.2",
     "symfony/process": "^7.0"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^11.5 || ^12.0"
+  },
   "autoload": {
     "psr-4": {
       "Restruct\\Dot\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Restruct\\Dot\\Tests\\": "tests/"
     }
   },
   "extra": {
