@@ -93,4 +93,32 @@ final class BundledBinaryTest extends TestCase
 
         $this->assertStringContainsString('graphviz version 12.2.1', $process->getErrorOutput());
     }
+
+    /**
+     * @return array<string, array{string}>
+     */
+    public static function rasterAndPdfFormats(): array
+    {
+        return ['png' => ['png'], 'pdf' => ['pdf'], 'jpg' => ['jpg'], 'gif' => ['gif']];
+    }
+
+    #[\PHPUnit\Framework\Attributes\DataProvider('rasterAndPdfFormats')]
+    public function testBundledBinaryHasNoRasterOrPdfOutput(string $format): void
+    {
+        # README "Rendering with DotRenderer": built without cairo, gd and libpng. Pins that
+        # claim, so a rebuild that adds these formats fails here and the README gets updated.
+        self::requireBundled($this);
+        $renderer = new DotRenderer();
+
+        $this->assertNull($renderer->render('digraph { a -> b }', $format));
+        $this->assertStringContainsString('Format: "' . $format . '" not recognized', (string) $renderer->getLastError());
+    }
+
+    public function testBundledBinaryRendersPostScript(): void
+    {
+        # The vector print format the README offers in place of PDF
+        self::requireBundled($this);
+
+        $this->assertStringStartsWith('%!PS-Adobe', (string) (new DotRenderer())->render('digraph { a -> b }', 'eps'));
+    }
 }

@@ -122,9 +122,11 @@ if ($svg === null) {
 
 `render()` returns `null` when no `dot` binary is resolved, when `dot` fails, or when it prints
 nothing; `getLastError()` then holds dot's error output. The second argument of `render()` is the
-`-T` output format. The bundled binary is built without cairo, gd and libpng, so it has no PNG or
-PDF output: use `svg` (the default) or another of Graphviz's core text formats, or a full Graphviz
-install (such as Homebrew's) for raster output.
+`-T` output format. The bundled binary is built without cairo, gd and libpng, so it has no PNG,
+JPEG, GIF or PDF output (`render()` returns `null` and `getLastError()` says the format is not
+recognized). It does have `svg` (the default) and `svgz`, PostScript (`ps`, `eps`) and Graphviz's
+text formats such as `json`, `dot`, `xdot` and `plain`; `x64/dot_static -T?` lists them all. For
+raster or PDF output, use a full Graphviz install (such as Homebrew's).
 
 `renderInlineSvg()`, and `DotRenderer::cleanSvgForInline()` on any SVG string, strip the XML
 declaration and DOCTYPE, replace `xlink:href` with `href` and drop the `xmlns:xlink` namespace.
