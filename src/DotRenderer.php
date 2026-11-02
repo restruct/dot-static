@@ -2,6 +2,7 @@
 
 namespace Restruct\Dot;
 
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
 
 /**
@@ -28,7 +29,8 @@ class DotRenderer
      *
      * @param string|DotGraph $dot DOT source string or DotGraph builder instance
      * @param string $format Output format (svg, png, pdf, etc.)
-     * @return string|null Rendered output or null on failure
+     * @return string|null Rendered output, or null on failure (no binary, non-zero exit, empty
+     *                     output, or a run longer than setTimeout())
      */
     public function render(string|DotGraph $dot, string $format = 'svg'): ?string
     {
@@ -42,7 +44,17 @@ class DotRenderer
         $process = new Process([$dotPath, '-T' . $format]);
         $process->setInput($dotSource);
         $process->setTimeout($this->timeout);
-        $process->run();
+        try {
+            $process->run();
+        } catch (ProcessTimedOutException $e) {
+            # A run longer than setTimeout() is a failure like any other: report it via
+            # getLastError() and return null as documented, instead of throwing out of render().
+            # Symfony has already stopped the process; any stderr dot wrote before that is kept.
+            $stderr = $process->getErrorOutput();
+            $this->lastError = sprintf('dot timed out after %d seconds', $this->timeout)
+                . ($stderr !== '' ? "\n" . $stderr : '');
+            return null;
+        }
 
         # Capture stderr for debugging via getLastError()
         $this->lastError = $process->getErrorOutput() ?: null;

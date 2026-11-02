@@ -120,8 +120,10 @@ if ($svg === null) {
 }
 ```
 
-`render()` returns `null` when no `dot` binary is resolved, when `dot` fails, or when it prints
-nothing; `getLastError()` then holds dot's error output. The second argument of `render()` is the
+`render()` returns `null` when no `dot` binary is resolved, when `dot` fails, when it prints
+nothing, or when it runs longer than the timeout; `getLastError()` then holds dot's error output
+(for a timeout: a "dot timed out" line, followed by anything dot wrote to stderr before it was
+stopped). The second argument of `render()` is the
 `-T` output format. The bundled binary is built without cairo, gd and libpng, so it has no PNG,
 JPEG, GIF or PDF output (`render()` returns `null` and `getLastError()` says the format is not
 recognized). It does have `svg` (the default) and `svgz`, PostScript (`ps`, `eps`) and Graphviz's
